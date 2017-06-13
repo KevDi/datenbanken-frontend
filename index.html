@@ -4,12 +4,16 @@
     <title>MongoDB Demo</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/dbfrontend.css">
+    <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/datatables.min.js"></script>
     <script type="text/javascript" src="js/dbfrontend.js"></script>
 </head>
 <body id="mongoDemo" data-spy="scroll" data-target=".navbar" data-offset="60">
@@ -28,7 +32,9 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#suche">SUCHE</a></li>
+                <li><a href="#ergebnis">SUCHERGEBNIS</a></li>
+                <li><a href="#hinzufuegen">HINZUFÜGEN</a></li>
+                <li><a href="#bearbeiten">BEARBEITEN</a></li>
                 <li><a href="#ueber">ÜBER</a></li>
                 <li><a href="#hilfe">HILFE</a></li>
             </ul>
@@ -37,32 +43,85 @@
 </nav>
 
 <!-- Container (Header Section) -->
-<div id="suche" class="jumbotron text-center">
+<div id="suchen" class="jumbotron text-center fill">
     <h1>Movie Database</h1>
     <p>Eine MongoDB Demo.</p>
     <form class="form-inline">
         <div class="input-group">
-            <input type="text" class="form-control" size="50" placeholder="Suche nach Film, Schauspieler oder Regisseur." required>
+            <input id="search" type="text" class="form-control" size="50" placeholder="Suche nach Film, Schauspieler oder Regisseur." required>
             <div class="input-group-btn">
-                <button type="button" class="btn  btn-danger">Suchen</button>
+                <button type="button" class="btn  btn-danger" onclick="location.href='#ergebnis'">Suchen</button>
             </div>
         </div>
+        <br><br>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> Filme
+            </label>
+            <label class="btn btn-default">
+                <input type="radio" name="options" id="option2" autocomplete="off"> Personen
+            </label>
+        </div>
+
     </form>
 </div>
 
 <!-- Container (Suchergebnis Section) -->
-<div id="ergebnis" class="container-fluid  fill-60">
+<div id="ergebnis" class="container-fluid  fill">
     <div class="row">
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-12">
+            <table id="suchergebnis" width="100%" class="table compact table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">Titel</th>
+                        <th style="text-align: center">Genre</th>
+                        <th style="text-align: center">Erscheinungsjahr</th>
+                        <th style="text-align: center">Bewertung</th>
+                        <th style="text-align: center">Aktion</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+<!--        <div class="col-sm-4 text-center">
             <span class="glyphicon glyphicon-search logo "></span>
         </div>
         <div class="col-sm-8">
-            <h2>Suche</h2>
+            <h2>Suchen</h2>
             <h4><strong>MISSION:</strong> Our mission lorem ipsum..</h4>
             <p><strong>VISION:</strong> Our vision Lorem ipsum..</p>
+        </div>-->
+    </div>
+</div>
+
+<!-- Container (About Section) -->
+<div id="hinzufuegen" class="container-fluid bg-grey fill">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Hinzufügen</h2>
+            <p></p>
+        </div>
+        <div class="col-md-4 text-center">
+            <span class="glyphicon glyphicon-plus logo slideanim"></span>
         </div>
     </div>
 </div>
+
+<!-- Container (Hilfe Section) -->
+<div id="bearbeiten" class="container-fluid  fill">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Bearbeiten</h2>
+            <div>
+                <p>Wähle einen Eintrag aus der Tabelle.</p>
+            </div>
+            <p></p>
+        </div>
+        <div class="col-md-4 text-center">
+            <span class="glyphicon glyphicon-pencil logo slideanim"></span>
+        </div>
+    </div>
+</div>
+
 
 <!-- Container (About Section) -->
 <div id="ueber" class="container-fluid bg-grey fill-90">
@@ -77,8 +136,10 @@
     </div>
 </div>
 
+
+
 <!-- Container (Hilfe Section) -->
-<div id="hilfe" class="container-fluid  fill">
+<div id="hilfe" class="container-fluid  fill-110">
     <div class="row">
         <div class="col-md-8">
             <h2>Hilfe</h2>

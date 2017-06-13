@@ -7,8 +7,9 @@
 .jumbotron {
     background-color: #69b241; /* Green */
     color: #ffffff;
-    padding: 100px 25px;
+    padding: 25vh 25px;
     font-family: Montserrat, sans-serif;
+
 }
 
  .bg-grey {
@@ -16,7 +17,7 @@
  }
 
 .container-fluid {
-    padding: 60px 50px;
+    padding: 100px 50px;
 }
 
 .logo {
@@ -55,9 +56,12 @@
     color: #fff !important;
 }
 
+.navbar-fixed-top{
+    height:5vh;
+}
 .navbar-fixed-bottom{
     font-family: Montserrat, sans-serif;
-    height: 10vh;
+    height: 20vh;
     background-color: #212121;
     color: #fff !important;
     line-height: 1.42857143 !important;
@@ -73,8 +77,12 @@
     height: 90vh;
 }
 
+.fill-110 {
+    height: 105vh;
+}
+
 .fill {
-    height: 100vh;
+    height: 80vh;
 }
 
 footer .glyphicon {

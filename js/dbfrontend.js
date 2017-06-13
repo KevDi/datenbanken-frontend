@@ -25,12 +25,32 @@ $(document).ready(function(){
                 window.location.hash = hash;
             });
         } // End if
+
+
     });
+    $.fn.dataTable.ext.errMode = 'none';
+    $('#suchergebnis').DataTable({
+        'ajax':'data/response.json',
+        columns: [
+            {data: 'name', width: '40%'},
+            {data: 'genres', width: '20%'},
+            {data: 'year', width: '10%'},
+            {data: 'rating', width: '10%'},
+            {data:'', width: '20%'}
+        ],
+        "bLengthChange": false,
+        "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json"}
+    });
+
+    $('#search').on( 'keyup click', function () {
+        updateSearch();
+    } );
+
 })
 
 $(window).scroll(function() {
     $(".slideanim").each(function(){
-        var pos = $(this).offset().top;
+        var pos = $(this).offset().top
 
         var winTop = $(window).scrollTop();
         if (pos < winTop + 600) {
@@ -38,3 +58,10 @@ $(window).scroll(function() {
         }
     });
 });
+
+function updateSearch () {
+    $('#suchergebnis').DataTable().search(
+        $('#search').val(),
+        false,true
+    ).draw();
+}
