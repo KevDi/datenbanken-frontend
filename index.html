@@ -10,11 +10,15 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/dbfrontend.css">
     <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-tagsinput.css"/>
 
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/datatables.min.js"></script>
     <script type="text/javascript" src="js/dbfrontend.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput-angular.js"></script>
 </head>
 <body id="mongoDemo" data-spy="scroll" data-target=".navbar" data-offset="60">
 
@@ -48,7 +52,8 @@
     <p>Eine MongoDB Demo.</p>
     <form class="form-inline">
         <div class="input-group">
-            <input id="search" type="text" class="form-control" size="50" placeholder="Suche nach Film, Schauspieler oder Regisseur." required>
+            <input id="search" type="text" class="form-control" size="50"
+                   placeholder="Suche nach Film, Schauspieler oder Regisseur." required>
             <div class="input-group-btn">
                 <button type="button" class="btn  btn-danger" onclick="location.href='#ergebnis'">Suchen</button>
             </div>
@@ -56,10 +61,10 @@
         <br><br>
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-default active">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> Filme
+                <input type="radio" name="options" id="option1" autocomplete="off" value="filme" checked> Filme
             </label>
             <label class="btn btn-default">
-                <input type="radio" name="options" id="option2" autocomplete="off"> Personen
+                <input type="radio" name="options" id="option2" autocomplete="off" value="personen"> Personen
             </label>
         </div>
 
@@ -69,55 +74,215 @@
 <!-- Container (Suchergebnis Section) -->
 <div id="ergebnis" class="container-fluid  fill">
     <div class="row">
-        <div class="col-sm-12">
-            <table id="suchergebnis" width="100%" class="table compact table-striped table-hover">
-                <thead>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="display: inline-block; position: absolute;">
+                    <span class="glyphicon glyphicon-search "></span> Suchergebnisse
+                </div>
+                <div style="display: inline-block; width: 100%; position: relative">
+                    <center>
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-default active">
+                                <input type="radio" name="options2" id="option2_1" autocomplete="off" value="filme"
+                                       checked> Filme
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="options2" id="option2_2" autocomplete="off" value="personen">
+                                Personen
+                            </label>
+                        </div>
+                    </center>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table id="suchergebnis" width="100%" class="table compact table-striped table-hover">
+                    <thead>
                     <tr>
                         <th style="text-align: center">Titel</th>
                         <th style="text-align: center">Genre</th>
                         <th style="text-align: center">Erscheinungsjahr</th>
                         <th style="text-align: center">Bewertung</th>
                         <th style="text-align: center">Aktion</th>
+                        <th style="text-align: center; display: none">Id</th>
+                        <th style="text-align: center; display: none">Tags</th>
                     </tr>
-                </thead>
-            </table>
+                    </thead>
+                </table>
+            </div>
         </div>
-<!--        <div class="col-sm-4 text-center">
-            <span class="glyphicon glyphicon-search logo "></span>
-        </div>
-        <div class="col-sm-8">
-            <h2>Suchen</h2>
-            <h4><strong>MISSION:</strong> Our mission lorem ipsum..</h4>
-            <p><strong>VISION:</strong> Our vision Lorem ipsum..</p>
-        </div>-->
+        <!--        <div class="col-sm-4 text-center">
+                    <span class="glyphicon glyphicon-search logo "></span>
+                </div>
+                <div class="col-sm-8">
+                    <h2>Suchen</h2>
+                    <h4><strong>MISSION:</strong> Our mission lorem ipsum..</h4>
+                    <p><strong>VISION:</strong> Our vision Lorem ipsum..</p>
+                </div>-->
     </div>
 </div>
 
-<!-- Container (About Section) -->
+<!-- Container (Hinzufügen Section) -->
 <div id="hinzufuegen" class="container-fluid bg-grey fill">
     <div class="row">
         <div class="col-md-8">
-            <h2>Hinzufügen</h2>
             <p></p>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div style="display: inline-block; position: absolute;"> Hinzufügen
+                    </div>
+                    <div style="display: inline-block; width: 100%; position: relative">
+                        <center>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default active">
+                                    <input type="radio" name="options3" id="option3_1" autocomplete="off" value="filme"
+                                           checked>
+                                    Filme
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="options3" id="option3_2" autocomplete="off"
+                                           value="personen"> Personen
+                                </label>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <form id="add_movie_container">
+                        <div class="form-group">
+                            <label for="titel">Filmtitel:</label>
+                            <input type="text" class="form-control" id="titel">
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Erscheinungsjahr:</label>
+                            <input type="number" class="form-control" id="year">
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Bewertung:</label>
+                            <input type="text" class="form-control" id="rating">
+                        </div>
+                        <div class="form-group">
+                            <label for="genres">Genres:</label>
+                            <input type="text" class="form-control" id="genres" data-role="tagsinput"
+                                   style="width: 100%">
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Tags:</label>
+                            <input type="text" class="form-control" id="tags" data-role="tagsinput" style="width: 100%">
+                        </div>
+                        <button type="submit" class="btn btn-success">Hinzufügen</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </form>
+                    <form id="add_person_container">
+                        <div class="form-group">
+                            <label for="firstname">Vorname:</label>
+                            <input type="text" class="form-control" id="firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Nachname:</label>
+                            <input type="text" class="form-control" id="lastname">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Alter:</label>
+                            <input type="number" class="form-control" id="age">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Nationalität:</label>
+                            <input type="text" class="form-control" id="country">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Geschlecht:</label>
+                            <input type="text" class="form-control" id="gender">
+                        </div>
+                        <button type="submit" class="btn btn-success">Hinzufügen</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="col-md-4 text-center">
-            <span class="glyphicon glyphicon-plus logo slideanim"></span>
+            <center>
+                <span class="glyphicon glyphicon-plus logo slideanim" style="margin: 32%"></span>
+            </center>
+
         </div>
     </div>
 </div>
 
-<!-- Container (Hilfe Section) -->
+
+<!-- Container (Bearbeiten Section) -->
 <div id="bearbeiten" class="container-fluid  fill">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-4 text-center">
+            <span class="glyphicon glyphicon-pencil logo slideanim" style="margin: 30%"></span>
+        </div>
+        <div class="col-md-8" id="placeholder">
             <h2>Bearbeiten</h2>
             <div>
                 <p>Wähle einen Eintrag aus der Tabelle.</p>
             </div>
             <p></p>
         </div>
-        <div class="col-md-4 text-center">
-            <span class="glyphicon glyphicon-pencil logo slideanim"></span>
+        <div class="col-md-8" style="display: none;" id="change_container">
+            <p></p>
+            <div class="panel panel-default">
+                <div class="panel-heading"> Bearbeiten</div>
+
+                <div class="panel-body">
+                    <form id="change_movie_container">
+                        <div class="form-group">
+                            <label for="change_titel">Filmtitel:</label>
+                            <input type="text" class="form-control" id="change_titel">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_year">Ercheinungsjahr:</label>
+                            <input type="number" class="form-control" id="change_year">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_rating">Bewertung:</label>
+                            <input type="text" class="form-control" id="change_rating">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_genres">Genres:</label>
+                            <input type="text" class="form-control" id="change_genres" data-role="tagsinput"
+                                   style="width: 100%">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_tags">Tags:</label>
+                            <input type="text" class="form-control" id="change_tags" data-role="tagsinput"
+                                   style="width: 100%">
+                        </div>
+                        <button type="submit" class="btn btn-success">Ändern</button>
+                        <button type="button" class="btn btn-danger" id="change_movies_abort">Abbrechen</button>
+                    </form>
+                    <form id="change_person_container">
+                        <div class="form-group">
+                            <label for="change_firstname">Vorname:</label>
+                            <input type="text" class="form-control" id="change_firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_lastname">Nachname:</label>
+                            <input type="text" class="form-control" id="change_lastname">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_age">Alter:</label>
+                            <input type="number" class="form-control" id="change_age">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_country">Nationalität:</label>
+                            <input type="text" class="form-control" id="change_country">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_gender">Geschlecht:</label>
+                            <input type="text" class="form-control" id="change_gender">
+                        </div>
+                        <button type="submit" class="btn btn-success">Ändern</button>
+                        <button type="button" class="btn btn-danger" id="change_persons_abort">Abbrechen</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -128,14 +293,41 @@
     <div class="row">
         <div class="col-md-8">
             <h2>Über dieses Projekt</h2>
-            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang "Informatik" des Sommersemesters 2017. </p>
+            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang
+                "Informatik" des Sommersemesters 2017. Als Anwendung wurde ein Film-Datenbank gewählt die alle
+                Standardoperationen mit MongoDB zeigt. Entwickelt wurde sie von:
+                </p>
+            <br>
+            <div class="row">
+                <div class="col-lg-2">
+                    <img class="img-circle" src="images/thsc.png">
+                </div>
+                <div class="col-lg-10">
+                    <h2  style="vertical-align: middle;margin-top:40px;">Thomas Schentarra (868357)</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <h2 class="pull-right" style="vertical-align: middle;margin-top:40px;">Jan Kevin Dick (867992)</h2>
+                </div>
+                <div class="col-lg-2">
+                    <img class="img-circle" src="images/jadi.png">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <img class="img-circle" src="images/kedi.png">
+                </div>
+                <div class="col-lg-10">
+                    <h2 style="vertical-align: middle;margin-top:40px;">Kevin Dietzen (867516)</h2>
+                </div>
+            </div>
         </div>
         <div class="col-md-4 text-center">
-            <span class="glyphicon glyphicon-education logo slideanim"></span>
+            <span class="glyphicon glyphicon-education logo slideanim" style="margin: 32%"></span>
         </div>
     </div>
 </div>
-
 
 
 <!-- Container (Hilfe Section) -->
@@ -143,7 +335,8 @@
     <div class="row">
         <div class="col-md-8">
             <h2>Hilfe</h2>
-            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang "Informatik" des Sommersemesters 2017. </p>
+            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang
+                "Informatik" des Sommersemesters 2017. </p>
         </div>
         <div class="col-md-4 text-center">
             <span class="glyphicon glyphicon-question-sign logo slideanim"></span>

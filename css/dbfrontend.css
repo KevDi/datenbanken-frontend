@@ -17,7 +17,7 @@
  }
 
 .container-fluid {
-    padding: 100px 50px;
+    padding: 60px 50px;
 }
 
 .logo {
@@ -57,11 +57,10 @@
 }
 
 .navbar-fixed-top{
-    height:5vh;
 }
 .navbar-fixed-bottom{
     font-family: Montserrat, sans-serif;
-    height: 20vh;
+    height: 18vh;
     background-color: #212121;
     color: #fff !important;
     line-height: 1.42857143 !important;
@@ -70,19 +69,23 @@
 }
 
 .fill-60 {
-    height: 60vh;
+    min-height: 60vh;
+    overflow: auto;
 }
 
 .fill-90 {
-    height: 90vh;
+    min-height: 90vh;
+    overflow: auto;
 }
 
 .fill-110 {
-    height: 105vh;
+    min-height: 110vh;
+    overflow: auto;
 }
 
 .fill {
-    height: 80vh;
+    min-height: 82vh;
+    overflow: auto;
 }
 
 footer .glyphicon {
@@ -139,4 +142,13 @@ h4 {
         opacity: 1;
         -webkit-transform: translateY(0%);
     }
+}
+
+.bootstrap-tagsinput {
+    width: 100% !important;
+}
+
+.img-circle{
+    height: 120px;
+    border-radius: 50%;
 }
