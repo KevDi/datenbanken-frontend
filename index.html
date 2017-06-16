@@ -19,6 +19,8 @@
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-tagsinput.js"></script>
     <script type="text/javascript" src="js/bootstrap-tagsinput-angular.js"></script>
+
+
 </head>
 <body id="mongoDemo" data-spy="scroll" data-target=".navbar" data-offset="60">
 
@@ -40,7 +42,7 @@
                 <li><a href="#hinzufuegen">HINZUFÜGEN</a></li>
                 <li><a href="#bearbeiten">BEARBEITEN</a></li>
                 <li><a href="#ueber">ÜBER</a></li>
-                <li><a href="#hilfe">HILFE</a></li>
+                <li><a href="#api">API</a></li>
             </ul>
         </div>
     </div>
@@ -55,7 +57,7 @@
             <input id="search" type="text" class="form-control" size="50"
                    placeholder="Suche nach Film, Schauspieler oder Regisseur." required>
             <div class="input-group-btn">
-                <button type="button" class="btn  btn-danger" onclick="location.href='#ergebnis'">Suchen</button>
+                <button id="searchbtn" type="button" class="btn  btn-danger" onclick="location.href='#ergebnis'">Suchen</button>
             </div>
         </div>
         <br><br>
@@ -74,6 +76,12 @@
 <!-- Container (Suchergebnis Section) -->
 <div id="ergebnis" class="container-fluid  fill">
     <div class="row">
+        <div class="alert alert-success" id="message_success" style="display:none;">
+            <strong>Erledigt!</strong> <label id="success_label"></label>
+        </div>
+        <div class="alert alert-danger" id="message_failed" style="display:none;">
+            <strong>Fehler!</strong> <label id="failed_label"></label>
+        </div>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -107,6 +115,20 @@
                         <th style="text-align: center">Aktion</th>
                         <th style="text-align: center; display: none">Id</th>
                         <th style="text-align: center; display: none">Tags</th>
+                    </tr>
+                    </thead>
+                </table>
+                <table id="suchergebnis_personen" width="100%" class="table compact table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">Nachname</th>
+                        <th style="text-align: center">Vorname</th>
+                        <th style="text-align: center">Alter</th>
+                        <th style="text-align: center">Geschlecht</th>
+                        <th style="text-align: center">Nationalität</th>
+                        <th style="text-align: center">Sprachen</th>
+                        <th style="text-align: center">Aktion</th>
+                        <th style="text-align: center; display: none">Id</th>
                     </tr>
                     </thead>
                 </table>
@@ -153,15 +175,15 @@
                     <form id="add_movie_container">
                         <div class="form-group">
                             <label for="titel">Filmtitel:</label>
-                            <input type="text" class="form-control" id="titel">
+                            <input type="text" class="form-control" id="titel" required>
                         </div>
                         <div class="form-group">
                             <label for="year">Erscheinungsjahr:</label>
-                            <input type="number" class="form-control" id="year">
+                            <input type="number" class="form-control" id="year" required>
                         </div>
                         <div class="form-group">
                             <label for="rating">Bewertung:</label>
-                            <input type="text" class="form-control" id="rating">
+                            <input type="text" class="form-control" id="rating" required>
                         </div>
                         <div class="form-group">
                             <label for="genres">Genres:</label>
@@ -178,23 +200,27 @@
                     <form id="add_person_container">
                         <div class="form-group">
                             <label for="firstname">Vorname:</label>
-                            <input type="text" class="form-control" id="firstname">
+                            <input type="text" class="form-control" id="firstname" required>
                         </div>
                         <div class="form-group">
                             <label for="lastname">Nachname:</label>
-                            <input type="text" class="form-control" id="lastname">
+                            <input type="text" class="form-control" id="lastname" required>
                         </div>
                         <div class="form-group">
                             <label for="age">Alter:</label>
-                            <input type="number" class="form-control" id="age">
-                        </div>
-                        <div class="form-group">
-                            <label for="country">Nationalität:</label>
-                            <input type="text" class="form-control" id="country">
+                            <input type="number" class="form-control" id="age" required>
                         </div>
                         <div class="form-group">
                             <label for="gender">Geschlecht:</label>
-                            <input type="text" class="form-control" id="gender">
+                            <input type="text" class="form-control" id="gender" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Nationalität:</label>
+                            <input type="text" class="form-control" id="country" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Sprachen:</label>
+                            <input type="text" class="form-control" id="languages" data-role="tagsinput" style="width: 100%">
                         </div>
                         <button type="submit" class="btn btn-success">Hinzufügen</button>
                         <button type="reset" class="btn btn-danger">Reset</button>
@@ -232,17 +258,18 @@
 
                 <div class="panel-body">
                     <form id="change_movie_container">
+                        <input type="hidden" id="movie_id">
                         <div class="form-group">
                             <label for="change_titel">Filmtitel:</label>
-                            <input type="text" class="form-control" id="change_titel">
+                            <input type="text" class="form-control" id="change_titel" required>
                         </div>
                         <div class="form-group">
                             <label for="change_year">Ercheinungsjahr:</label>
-                            <input type="number" class="form-control" id="change_year">
+                            <input type="number" class="form-control" id="change_year" required>
                         </div>
                         <div class="form-group">
                             <label for="change_rating">Bewertung:</label>
-                            <input type="text" class="form-control" id="change_rating">
+                            <input type="text" class="form-control" id="change_rating" required>
                         </div>
                         <div class="form-group">
                             <label for="change_genres">Genres:</label>
@@ -258,25 +285,36 @@
                         <button type="button" class="btn btn-danger" id="change_movies_abort">Abbrechen</button>
                     </form>
                     <form id="change_person_container">
+                        <input type="hidden" id="person_id">
                         <div class="form-group">
                             <label for="change_firstname">Vorname:</label>
-                            <input type="text" class="form-control" id="change_firstname">
+                            <input type="text" class="form-control" id="change_firstname" required>
                         </div>
                         <div class="form-group">
                             <label for="change_lastname">Nachname:</label>
-                            <input type="text" class="form-control" id="change_lastname">
+                            <input type="text" class="form-control" id="change_lastname" required>
                         </div>
                         <div class="form-group">
                             <label for="change_age">Alter:</label>
-                            <input type="number" class="form-control" id="change_age">
-                        </div>
-                        <div class="form-group">
-                            <label for="change_country">Nationalität:</label>
-                            <input type="text" class="form-control" id="change_country">
+                            <input type="number" class="form-control" id="change_age" required>
                         </div>
                         <div class="form-group">
                             <label for="change_gender">Geschlecht:</label>
-                            <input type="text" class="form-control" id="change_gender">
+                            <input type="text" class="form-control" id="change_gender" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="change_country">Nationalität:</label>
+                            <input type="text" class="form-control" id="change_country" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="change_tags">Sprachen:</label>
+                            <input type="text" class="form-control" id="change_languages" data-role="tagsinput"
+                                   style="width: 100%">
+                        </div>
+                        <div class="form-group">
+                            <label for="change_tags">Filme:</label>
+                            <input type="text" class="form-control" id="change_movies" data-role="tagsinput" readonly
+                                   style="width: 100%">
                         </div>
                         <button type="submit" class="btn btn-success">Ändern</button>
                         <button type="button" class="btn btn-danger" id="change_persons_abort">Abbrechen</button>
@@ -293,33 +331,32 @@
     <div class="row">
         <div class="col-md-8">
             <h2>Über dieses Projekt</h2>
-            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang
+            <h4>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang
                 "Informatik" des Sommersemesters 2017. Als Anwendung wurde ein Film-Datenbank gewählt die alle
-                Standardoperationen mit MongoDB zeigt. Entwickelt wurde sie von:
-                </p>
+                Standardoperationen mit MongoDB zeigt. Entwickelt wurde sie von:</h4>
             <br>
+            <div class="row">
+                <div class="col-lg-2">
+                    <img class="img-circle" src="images/jadi.png">
+                </div>
+                <div class="col-lg-10">
+                    <h2 class="pull-left" style="vertical-align: middle;margin-top:40px;">Jan Kevin Dick (867992)</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <h2 class="pull-right" style="vertical-align: middle;margin-top:40px;">Kevin Dietzen (867516)</h2>
+                </div>
+                <div class="col-lg-2">
+                    <img class="img-circle" src="images/kedi.png">
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-2">
                     <img class="img-circle" src="images/thsc.png">
                 </div>
                 <div class="col-lg-10">
-                    <h2  style="vertical-align: middle;margin-top:40px;">Thomas Schentarra (868357)</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-10">
-                    <h2 class="pull-right" style="vertical-align: middle;margin-top:40px;">Jan Kevin Dick (867992)</h2>
-                </div>
-                <div class="col-lg-2">
-                    <img class="img-circle" src="images/jadi.png">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-2">
-                    <img class="img-circle" src="images/kedi.png">
-                </div>
-                <div class="col-lg-10">
-                    <h2 style="vertical-align: middle;margin-top:40px;">Kevin Dietzen (867516)</h2>
+                    <h2  class="pull-left" style="vertical-align: middle;margin-top:40px;">Thomas Schentarra (868357)</h2>
                 </div>
             </div>
         </div>
@@ -331,12 +368,12 @@
 
 
 <!-- Container (Hilfe Section) -->
-<div id="hilfe" class="container-fluid  fill-110">
+<div id="api" class="container-fluid  fill-110">
     <div class="row">
-        <div class="col-md-8">
-            <h2>Hilfe</h2>
-            <p>Diese Seite zeigt eine MongoDB Demoanwendung für das Datenbank-Praktikum im Master-Studiengang
-                "Informatik" des Sommersemesters 2017. </p>
+        <div class="col-md-8 ">
+            <div class="embed-responsive embed-responsive-4by3">
+                <iframe class="embed-responsive-item" src="http://10.0.107.102:8081/swagger-ui.html"></iframe>
+            </div>
         </div>
         <div class="col-md-4 text-center">
             <span class="glyphicon glyphicon-question-sign logo slideanim"></span>
