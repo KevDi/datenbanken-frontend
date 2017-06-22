@@ -432,6 +432,25 @@ function ladeFilmsuche() {
             $('#change_titel').val(rowdata.name);
             trigger_event_handler('#change_titel');
 
+            var regisseur="";
+            $.getJSON(adress+"/"+rowdata.id+"/regisseur",function(data) {
+                if (data != null) {
+                    var first="";
+                    var last="";
+                    $.each(data, function(key, value) {
+                        if(key==="firstName"){
+                            first=value;
+                        }
+                        if(key==="lastName"){
+                            last=value;
+                        }
+                        regisseur=first+" "+last;
+                    });
+                    $('#change_regisseur').val(regisseur);
+                    trigger_event_handler('#change_regisseur');
+                }
+            });
+
             rowdata.year = rowdata.year.replace('<center>', '');
             rowdata.year = rowdata.year.replace('</center>', '');
             $('#change_year').val(rowdata.year);
